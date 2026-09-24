@@ -13,42 +13,12 @@ app.use(express.json());
 
 // Data pemain
 let namaPemain = [
-  {
-    No_Punggung: 1,
-    nama: "Joan_Garcia",
-    Posisi: "goalKeeper",
-    Kebangsaan: "uniEropa",
-  },
-  {
-    No_Punggung: 10,
-    nama: "Lamine_Yamal",
-    Posisi: "rightWing",
-    Kebangsaan: "uniEropa",
-  },
-  {
-    No_Punggung: 5,
-    nama: "Pau_Cubarsi",
-    Posisi: "centerBack",
-    Kebangsaan: "uniEropa",
-  },
-  {
-    No_Punggung: 8,
-    nama: "Pedri",
-    Posisi: "centerMidfield",
-    Kebangsaan: "uniEropa",
-  },
-  {
-    No_Punggung: 9,
-    nama: "Gabriel_Jesus",
-    Posisi: "Striker",
-    Kebangsaan: "nonEropa",
-  },
-  {
-    No_Punggung: 11,
-    nama: "Raphinha",
-    Posisi: "leftWing",
-    Kebangsaan: "nonEropa",
-  },
+  {No_Punggung: 1,nama: "Joan_Garcia",Posisi: "goalKeeper", Kebangsaan: "uniEropa", },
+  {No_Punggung: 10,nama: "Lamine_Yamal",Posisi: "rightWing",Kebangsaan: "uniEropa",},
+  {No_Punggung: 5,nama: "Pau_Cubarsi",Posisi: "centerBack",Kebangsaan: "uniEropa",},
+  {No_Punggung: 8, nama: "Pedri",Posisi: "centerMidfield",Kebangsaan: "uniEropa",},
+  {No_Punggung: 9,nama: "Gabriel_Jesus",Posisi: "Striker",Kebangsaan: "nonEropa",},
+  {No_Punggung: 11,nama: "Raphinha",Posisi: "leftWing",Kebangsaan: "nonEropa", },
 ];
 
 // GET /namaPemain
