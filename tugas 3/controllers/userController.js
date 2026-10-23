@@ -1,4 +1,3 @@
-// Solusi Terintegrasi - User Controller
 const User = require("../models/userModel");
 
 const MAX_LIMIT = 100;
