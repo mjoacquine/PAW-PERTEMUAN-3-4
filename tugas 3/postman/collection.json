@@ -1,0 +1,457 @@
+{
+  "info": {
+    "_postman_id": "3e3ef419-2e45-4d5b-ac98-5b89ff891da7",
+    "name": "Tugas 3 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58950012",
+    "_collection_link": "https://go.postman.co/collection/58950012-3e3ef419-2e45-4d5b-ac98-5b89ff891da7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Post Formsasi",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa apakah status code bernilai 201 (Created)\r\npm.test(\"Status code adalah 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons server\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa apakah data yang dikembalikan memiliki _id dan namaFormasi yang benar\r\npm.test(\"Response memiliki _id dan namaFormasi yang sesuai\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.namaFormasi).to.eql('4-3-3');\r\n});\r\n\r\n// 4. Menyimpan ID formasi secara otomatis ke Environment agar bisa dipakai request lain\r\npm.environment.set(\"formasiId\", responseData._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"namaFormasi\": \"4-3-3\",\r\n  \"deskripsi\": \"Formasi menyerang standar\",\r\n  \"jumlahPemainBertahan\": 4,\r\n  \"jumlahPemainTengah\": 3,\r\n  \"jumlahPemainMenyerang\": 3\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/formasi",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "formasi"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mengambil data formsasi'",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa apakah status code bernilai 200 (OK)\r\npm.test(\"Status code adalah 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons server\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa apakah format data berupa array atau objek pembungkus pagination\r\n// (Disesuaikan dengan struktur controller kamu yang mengembalikan objek { data, page, limit, total })\r\npm.test(\"Response memiliki struktur data yang benar\", function () {\r\n    // Jika controller menggunakan pagination, data ada di dalam responseData.data\r\n    // Jika controller langsung mengembalikan array, gunakan responseData\r\n    const listData = responseData.data || responseData;\r\n    pm.expect(listData).to.be.an('array');\r\n});\r\n\r\n// 4. Memastikan formasi yang sebelumnya dibuat (formasiId) ada di dalam daftar\r\npm.test(\"Daftar formasi berisi formasi yang baru dibuat\", function () {\r\n    const listData = responseData.data || responseData;\r\n    const formasiId = pm.environment.get(\"formasiId\");\r\n    \r\n    if (formasiId) {\r\n        const ids = listData.map(item => item._id);\r\n        pm.expect(ids).to.include(formasiId);\r\n    } else {\r\n        console.log(\"Variabel environment 'formasiId' belum ada, lewati pengecekan ID spesifik.\");\r\n    }\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/formasi",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "formasi"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "post pemain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa apakah status code bernilai 201 (Created)\r\npm.test(\"Status code adalah 201 untuk pemain non-eropa\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa validitas data pemain non-eropa yang baru ditambahkan\r\npm.test(\"Response pemain non-eropa valid\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.nama).to.eql('Vinicius Jr');\r\n    pm.expect(responseData.wilayah).to.eql('Amerika Selatan');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Vinicius Jr\",\r\n  \"noPunggung\": 7,\r\n  \"posisi\": \"Winger\",\r\n  \"klub\": \"Real Madrid\",\r\n  \"wilayah\": \"Amerika Selatan\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/pemain",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pemain"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "mengambil data pemain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa status code 200 (OK)\r\npm.test(\"Status code adalah 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\nconst listData = responseData.data || responseData;\r\n\r\n// 3. Memastikan respons berupa array dan datanya tidak kosong\r\npm.test(\"Response berupa array dan berisi data pemain\", function () {\r\n    pm.expect(listData).to.be.an('array');\r\n    pm.expect(listData.length).to.be.above(0);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/pemain",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pemain"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "mengambil data oemain dari eropa",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa status code 200 (OK)\r\npm.test(\"Status code adalah 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\nconst listData = responseData.data || responseData;\r\n\r\n// 3. Memastikan semua data yang dikembalikan hanya yang wilayahnya 'Eropa'\r\npm.test(\"Semua pemain yang dikembalikan wajib berasal dari wilayah Eropa\", function () {\r\n    pm.expect(listData).to.be.an('array');\r\n    listData.forEach(item => {\r\n        pm.expect(item.wilayah.toLowerCase()).to.eql('eropa');\r\n    });\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/pemain/eropa",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pemain",
+            "eropa"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "add prediksi",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa status code 201 (Created)\r\npm.test(\"Status code adalah 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa apakah data prediksi tersimpan dengan benar\r\npm.test(\"Response memiliki _id dan data prediksi yang sesuai\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.timA).to.eql('Manchester City');\r\n    pm.expect(responseData.timB).to.eql('Real Madrid');\r\n    pm.expect(responseData.skorPrediksi).to.eql('2-1');\r\n});\r\n\r\n// 4. Menyimpan ID prediksi ke environment untuk pengujian berikutnya jika diperlukan\r\npm.environment.set(\"prediksiId\", responseData._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"timA\": \"Manchester City\",\r\n  \"timB\": \"Real Madrid\",\r\n  \"skorPrediksi\": \"2-1\",\r\n  \"akurasiPersen\": 85,\r\n  \"catatanAnalisis\": \"City unggul di kandang\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/prediksi",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "prediksi"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "mengambil data prediksi",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa status code 201 (Created)\r\npm.test(\"Status code adalah 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa apakah data prediksi tersimpan dengan benar\r\npm.test(\"Response memiliki _id dan data prediksi yang sesuai\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.timA).to.eql('Manchester City');\r\n    pm.expect(responseData.timB).to.eql('Real Madrid');\r\n    pm.expect(responseData.skorPrediksi).to.eql('2-1');\r\n});\r\n\r\n// 4. Menyimpan ID prediksi ke environment untuk pengujian berikutnya jika diperlukan\r\npm.environment.set(\"prediksiId\", responseData._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/prediksi",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "prediksi"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "pst user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa status code 201 (Created)\r\npm.test(\"Status code adalah 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa apakah data user tersimpan dengan benar\r\npm.test(\"Response memiliki _id dan data user yang sesuai\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.nama).to.eql('Joaquin');\r\n    pm.expect(responseData.email).to.eql('joaquin@example.com');\r\n    pm.expect(responseData.role).to.eql('admin');\r\n});\r\n\r\n// 4. Menyimpan ID user ke environment\r\npm.environment.set(\"userId\", responseData._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Joaquin\",\r\n  \"email\": \"joaquin@example.com\",\r\n  \"password\": \"password123\",\r\n  \"role\": \"admin\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/user",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "user"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "mengambil data user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Memeriksa status code 201 (Created)\r\npm.test(\"Status code adalah 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// 2. Mengambil data JSON dari respons\r\nconst responseData = pm.response.json();\r\n\r\n// 3. Memeriksa apakah data user tersimpan dengan benar\r\npm.test(\"Response memiliki _id dan data user yang sesuai\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.nama).to.eql('Joaquin');\r\n    pm.expect(responseData.email).to.eql('joaquin@example.com');\r\n    pm.expect(responseData.role).to.eql('admin');\r\n});\r\n\r\n// 4. Menyimpan ID user ke environment\r\npm.environment.set(\"userId\", responseData._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/user",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "user"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "post pemain 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code adalah 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nconst responseData = pm.response.json();\r\n\r\npm.test(\"Data Mbappé berhasil dibuat\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.nama).to.eql('Kylian Mbappe');\r\n    pm.expect(responseData.wilayah).to.eql('Eropa');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Kylian Mbappe\",\r\n  \"noPunggung\": 10,\r\n  \"posisi\": \"Forward\",\r\n  \"klub\": \"Real Madrid\",\r\n  \"wilayah\": \"Eropa\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/pemain",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pemain"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "post pemain 2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code adalah 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nconst responseData = pm.response.json();\r\n\r\npm.test(\"Data Modric berhasil dibuat\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.nama).to.eql('Luka Modric');\r\n    pm.expect(responseData.wilayah).to.eql('Eropa');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Luka Modric\",\r\n  \"noPunggung\": 10,\r\n  \"posisi\": \"Midfielder\",\r\n  \"klub\": \"Real Madrid\",\r\n  \"wilayah\": \"Eropa\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/pemain",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pemain"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "posy pemain 3",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code adalah 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nconst responseData = pm.response.json();\r\n\r\npm.test(\"Data Bellingham berhasil dibuat\", function () {\r\n    pm.expect(responseData).to.have.property('_id');\r\n    pm.expect(responseData.nama).to.eql('Jude Bellingham');\r\n    pm.expect(responseData.wilayah).to.eql('Eropa');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Jude Bellingham\",\r\n  \"noPunggung\": 5,\r\n  \"posisi\": \"Midfielder\",\r\n  \"klub\": \"Real Madrid\",\r\n  \"wilayah\": \"Eropa\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/pemain",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pemain"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filtewr dan sorting",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}

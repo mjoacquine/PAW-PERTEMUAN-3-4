@@ -1,0 +1,34 @@
+{
+	"id": "1810d3c1-cbf9-4a21-9850-973f967de102",
+	"name": "Tugas 3 Environment",
+	"values": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "formasiId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "prediksiId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-10-23T07:53:14.540Z",
+	"_postman_exported_using": "Postman/12.33.4"
+}
